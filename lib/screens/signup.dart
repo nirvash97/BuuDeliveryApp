@@ -1,5 +1,6 @@
 import 'package:buudeli/util/dialog.dart';
 import 'package:buudeli/util/style1.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
@@ -60,6 +61,9 @@ class _SignUpState extends State<SignUp> {
             normaldialog(context, 'ข้อมูลไม่ครบถ้วน');
           } else if (usertype == null || usertype.isEmpty) {
             normaldialog(context, 'กรุณาเลือกชนิดผู้ใช้');
+          } else {
+            checkUser();
+            
           }
         },
         child: Text(
@@ -67,6 +71,25 @@ class _SignUpState extends State<SignUp> {
           style: TextStyle(color: Colors.black),
         ),
       ));
+
+    Future<Null> checkUser() async {
+      String url = 'http://192.168.56.1/Buudeli/getUser.php?isAdd=true&User=$username';
+      
+      try{
+        Response response = await Dio().get(url);
+        if( response.toString() == 'null') {
+        registerThread();
+        }
+        else
+        {
+          normaldialog(context, 'This username $username is not avialable Please Change !');
+        }
+      }catch(e)
+      {
+
+      }
+
+    }
 
   Widget userrole1() => Row(
         //Customer Selection
@@ -104,7 +127,7 @@ class _SignUpState extends State<SignUp> {
             child: Row(
               children: <Widget>[
                 Radio(
-                  value: 'owner',
+                  value: 'Owner',
                   groupValue: usertype,
                   onChanged: (value) {
                     setState(() {
@@ -131,7 +154,7 @@ class _SignUpState extends State<SignUp> {
             child: Row(
               children: <Widget>[
                 Radio(
-                  value: 'rider',
+                  value: 'Rider',
                   groupValue: usertype,
                   onChanged: (value) {
                     setState(() {
@@ -234,4 +257,19 @@ class _SignUpState extends State<SignUp> {
           ),
         ],
       );
+
+      Future<Null> registerThread()async {
+        String url ='http://192.168.56.1/Buudeli/addData.php?isAdd=true&name=$name&username=$username&password=$password&usertype=$usertype';
+        try{
+          Response response = await Dio().get(url);
+          print('res = $response');
+          if(response.toString() =='true'){
+            Navigator.pop(context);
+          }
+        } catch(e){
+          print(e);
+          print('not clear');
+          normaldialog(context, 'Register Fail. Please try again.');
+        }
+      }
 }
