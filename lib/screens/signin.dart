@@ -8,6 +8,7 @@ import 'package:buudeli/util/dialog.dart';
 import 'package:buudeli/util/style1.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -57,13 +58,13 @@ class _SignInState extends State<SignIn> {
         if (password == userModel.password) {
           String usertype = userModel.usertype;
           if(usertype == 'User'){
-            routetoService(MainUser());
+            routetoService(MainUser() , userModel);
           }
           else if (usertype == 'Owner'){
-            routetoService(MainShop());
+            routetoService(MainShop(), userModel);
           }
           else if (usertype == 'Rider'){
-            routetoService(MainRider());
+            routetoService(MainRider(), userModel);
           }
           else {
             normaldialog(context, 'Please Try again');
@@ -77,7 +78,14 @@ class _SignInState extends State<SignIn> {
     }
   }
 
-  void routetoService(Widget myWidget) {
+  Future<Null> routetoService(Widget myWidget, UserModel userModel) async{
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('id', userModel.id);
+      preferences.setString('usertype', userModel.usertype);
+      preferences.setString('name', userModel.name);
+
+
+
      MaterialPageRoute route = MaterialPageRoute(builder: (context) => myWidget,);
     Navigator.pushAndRemoveUntil(context, route, (route) => false);
   }
