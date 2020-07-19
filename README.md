@@ -21,8 +21,8 @@
   go to vscode open terminal and go to directory project folder and type "flutter run -d test ( You have to open genymotion emulator first)"
   and you will see what's going on with this project
   
-  If you have question you can send me an email at 59160273@go.buu.ac.th
-  -This project will be update almost everyday. Please enjoy !!!
+  If you have question you can send me an email at 59160273@go.buu.ac.th 
+   - This project will be update almost everyday. Please enjoy !!!
 
 
 
