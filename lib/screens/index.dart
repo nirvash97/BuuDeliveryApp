@@ -26,10 +26,12 @@ class _IndexState extends State<Index> {
   Future<Null> checkPreferences() async {
     try {
       SharedPreferences preferences = await SharedPreferences.getInstance();
-      String checkType = preferences .get('usertype');
-      if (checkType != null && checkType.isEmpty) {
+      String checkType = preferences.getString('usertype');
+      if (checkType != null && checkType.isNotEmpty) {
         if (checkType == 'User') {
+          print('$checkType Role Access');
           routetoservice(MainUser());
+          
         } else if(checkType == 'Owner'){
           routetoservice(MainShop());
         } else if(checkType =='Rider'){
@@ -38,6 +40,9 @@ class _IndexState extends State<Index> {
           normaldialog(context, 'Usertype Error !!');
         }
 
+      }
+      else {
+        print('Error checkType = $checkType');
       }
     } catch (e) {
       print('Check Preference Error');
@@ -55,7 +60,10 @@ class _IndexState extends State<Index> {
     return Scaffold(
       appBar: AppBar(),
       drawer: showDrawer(),
+      
     );
+    
+
   }
 
   Drawer showDrawer() => Drawer(

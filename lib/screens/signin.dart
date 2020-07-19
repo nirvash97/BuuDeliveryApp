@@ -55,15 +55,19 @@ class _SignInState extends State<SignIn> {
       print('result = $result');
       for (var map in result) {
         UserModel userModel = UserModel.fromJson(map);
+        
         if (password == userModel.password) {
           String usertype = userModel.usertype;
           if(usertype == 'User'){
+            print('Preference User Saved');
             routetoService(MainUser() , userModel);
           }
           else if (usertype == 'Owner'){
+            print('Preference Owner Saved');
             routetoService(MainShop(), userModel);
           }
           else if (usertype == 'Rider'){
+            print('Preference Rider Saved');
             routetoService(MainRider(), userModel);
           }
           else {
@@ -81,6 +85,7 @@ class _SignInState extends State<SignIn> {
   Future<Null> routetoService(Widget myWidget, UserModel userModel) async{
       SharedPreferences preferences = await SharedPreferences.getInstance();
       preferences.setString('id', userModel.id);
+      print(preferences.getString('id'));
       preferences.setString('usertype', userModel.usertype);
       preferences.setString('name', userModel.name);
 
