@@ -1,6 +1,10 @@
 # Buu Derivery App
 
  A new Delivery App Flutter project-.
+ 
+# Note Patch
+ 19.7.20
+ - Now SharedPreference And Authen can work perfectly !!
 
 # How to run/test this app
   Requirement : 
