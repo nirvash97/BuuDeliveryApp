@@ -22,7 +22,7 @@
   and you will see what's going on with this project
   
   If you have question you can send me an email at 59160273@go.buu.ac.th
-  This project will be update almost everyday. Please enjoy !!!
+  -This project will be update almost everyday. Please enjoy !!!
 
 
 
