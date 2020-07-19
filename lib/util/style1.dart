@@ -18,6 +18,12 @@ Text showname(String title) => Text(
       )
     );
 
+  BoxDecoration myBoxDeco(String picName) {
+    return BoxDecoration(
+        image: DecorationImage(image: AssetImage('images/$picName'),fit: BoxFit.cover),
+      );
+  }
+
  Container showlogo() {
     return Container(
             width: 120.0,
