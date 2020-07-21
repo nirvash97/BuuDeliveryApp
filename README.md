@@ -3,12 +3,12 @@
  A new Delivery App Flutter project-.
  
 # Note Patch
- #21.7.20
+ # 21.7.20
   - add user drawer by type
   - add drawer route
   - make page for edit shop info 
   - create shop info form
- #19.7.20
+ # 19.7.20
   - Now SharedPreference And Authen can work perfectly !!
 
 # How to run/test this app
