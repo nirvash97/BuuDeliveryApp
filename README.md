@@ -4,12 +4,12 @@
  
 # Note Patch
  21.7.20
- - add user drawer by type
- - add drawer route
- - make page for edit shop info 
- - create shop info form
+  - add user drawer by type
+  - add drawer route
+  - make page for edit shop info 
+  - create shop info form
  19.7.20
- - Now SharedPreference And Authen can work perfectly !!
+  - Now SharedPreference And Authen can work perfectly !!
 
 # How to run/test this app
   Requirement : 
