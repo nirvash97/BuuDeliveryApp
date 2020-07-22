@@ -1,4 +1,6 @@
+import 'package:buudeli/util/style1.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddShopInfo extends StatefulWidget {
   @override
@@ -17,20 +19,65 @@ class _AddShopInfoState extends State<AddShopInfo> {
             addressForm(),
             phoneForm(),
             groupImage(),
+            Style1().mysizebox(),
+            showMap(),
+            Style1().mysizebox(),
+            saveButton()
           ],
         ),
       ),
     );
   }
 
+  Widget saveButton() {
+    return Container( width: 300.0 ,
+      child: RaisedButton.icon(
+              color: Colors.amber,
+              onPressed: () {},
+              icon: Icon(Icons.save),
+              label: Text('บันทึกข้อมูล'),
+            ),
+    );
+  }
+
+  Container showMap() {
+    LatLng latLng = LatLng(13.273342, 100.9539475);
+    CameraPosition cameraPosition = CameraPosition(target: latLng, zoom: 16.0);
+    return Container(
+      height: 300.0,
+      child: GoogleMap(
+        initialCameraPosition: cameraPosition,
+        mapType: MapType.normal,
+        onMapCreated: (controller) {},
+      ),
+    );
+  }
+
   Row groupImage() {
-    return Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        IconButton(icon: Icon(Icons.add_a_photo , size: 30.0,), onPressed: () {}),
+        Container( margin: EdgeInsets.only(left: 10.0),
+          child: IconButton(
+              icon: Icon(
+                Icons.add_a_photo,
+                size: 30.0,
+              ),
+              onPressed: () {}),
+        ),
         Container(
           width: 200.0,
           child: Image.asset('images/t1.png'),
-        ), IconButton(icon: Icon(Icons.add_photo_alternate ,size: 36.0,), onPressed: (){},)
+        ),
+        Container( margin: EdgeInsets.only(right: 10.0),
+          child: IconButton(
+            icon: Icon(
+              Icons.add_photo_alternate,
+              size: 36.0,
+            ),
+            onPressed: () {},
+          ),
+        )
       ],
     );
   }
@@ -74,7 +121,7 @@ Widget phoneForm() => Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(top: 10.0 , bottom: 10.0),
+          margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
           width: 250.0,
           child: TextField(
             keyboardType: TextInputType.number,
