@@ -3,6 +3,10 @@
  A new Delivery App Flutter project-.
  
 # Note Patch
+ # 22.07.20
+ - add google api 
+ - edit add shop info pages
+
  # 21.7.20
   - add user drawer by type
   - add drawer route
