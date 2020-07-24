@@ -3,6 +3,9 @@
  A new Delivery App Flutter project-.
  
 # Note Patch
+ # 24.7.20
+ - add location package 
+ - avialable for ios right now but google api still not work ( cause need mac os for developing xcode and simulator )
  # 22.07.20
  - add google api 
  - edit add shop info pages
