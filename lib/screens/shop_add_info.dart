@@ -1,6 +1,8 @@
+
 import 'package:buudeli/util/style1.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 class AddShopInfo extends StatefulWidget {
   @override
@@ -8,6 +10,38 @@ class AddShopInfo extends StatefulWidget {
 }
 
 class _AddShopInfoState extends State<AddShopInfo> {
+
+//Field
+double lat,lng;
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    findLatLng();
+  }
+
+
+Future<Null> findLatLng() async {
+  LocationData locationData = await findLocation();
+  lat = locationData.latitude;
+  lng = locationData.longitude;
+  print('lat = $lat , lng =$lng');
+}
+
+
+Future<LocationData> findLocation() async {
+  Location location = Location();
+  try {
+    return location.getLocation();
+  } catch (e) {
+    return null;
+  }
+
+
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
