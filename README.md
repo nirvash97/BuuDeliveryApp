@@ -3,6 +3,8 @@
  A new Delivery App Flutter project-.
  
 # Note Patch
+ # 25.7.20
+ -add marker for google map api
  # 24.7.20
  - add location package 
  - avialable for ios right now but google api still not work ( cause need mac os for developing xcode and simulator )
