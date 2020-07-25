@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class Style1 {
   Color goldAmber = Colors.amberAccent;
   Color littleGray = Colors.grey[400];
+  Widget showProgress() {
+    return Center(child: CircularProgressIndicator(),);
+  }
 
   SizedBox mysizebox() => SizedBox(
         width: 8.0,
