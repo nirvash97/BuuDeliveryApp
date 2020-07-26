@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:buudeli/util/style1.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 
 class AddShopInfo extends StatefulWidget {
@@ -11,6 +14,7 @@ class AddShopInfo extends StatefulWidget {
 class _AddShopInfoState extends State<AddShopInfo> {
 //Field
   double lat, lng;
+  File file;
 
   @override
   void initState() {
@@ -111,11 +115,11 @@ class _AddShopInfoState extends State<AddShopInfo> {
                 Icons.add_a_photo,
                 size: 30.0,
               ),
-              onPressed: () {}),
+              onPressed: () => pickImage(ImageSource.camera)),
         ),
         Container(
-          width: 200.0,
-          child: Image.asset('images/t1.png'),
+          width: 250.0,
+          child: file == null ? Image.asset('images/t1.png') : Image.file(file),
         ),
         Container(
           margin: EdgeInsets.only(right: 10.0),
@@ -124,11 +128,25 @@ class _AddShopInfoState extends State<AddShopInfo> {
               Icons.add_photo_alternate,
               size: 36.0,
             ),
-            onPressed: () {},
+            onPressed: () => pickImage(ImageSource.gallery),
           ),
         )
       ],
     );
+  }
+
+  Future<Null> pickImage(ImageSource imageSource) async {
+    try {
+      var object = await ImagePicker.pickImage(
+        source: imageSource,
+        maxHeight: 800.0,
+        maxWidth: 800.0,
+      );
+
+      setState(() {
+        file = object;
+      });
+    } catch (e) {}
   }
 
   Widget nameForm() => Row(
