@@ -39,6 +39,8 @@
   If everthing fine gonna be like this result
   https://imgur.com/IierTMf
   
+  go to edit AndroidManifest.xml in Andriod/app/src/main and add your google map api key at line 15
+  
   go to vscode open terminal and go to directory project folder and type "flutter run -d test ( You have to open genymotion emulator first)"
   and you will see what's going on with this project
   
