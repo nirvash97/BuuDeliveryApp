@@ -3,22 +3,25 @@
  A new Delivery App Flutter project-.
  
 # Note Patch
- - 25.7.20
- -add marker for google map api
- - 24.7.20
- -add location package 
- -avialable for ios right now but google api still not work ( cause need mac os for developing xcode and simulator )
- - 22.07.20
- -add google api 
- -edit add shop info pages
+ # 26.7.20
+ - add ImagePicker
+ - edit add shop info pages
+ # 25.7.20
+ - add marker for google map api
+ # 24.7.20
+ - add location package 
+ - avialable for ios right now but google api still not work ( cause need mac os for developing xcode and simulator )
+ # 22.07.20
+ - add google api 
+ - edit add shop info pages
 
- - 21.7.20
-  -add user drawer by type
-  -add drawer route
-  -make page for edit shop info 
-  -create shop info form
- - 19.7.20
-  -Now SharedPreference And Authen can work perfectly !!
+ # 21.7.20
+  - add user drawer by type
+  - add drawer route
+  - make page for edit shop info 
+  - create shop info form
+ # 19.7.20
+  - Now SharedPreference And Authen can work perfectly !!
 
 # How to run/test this app
   Requirement : 
