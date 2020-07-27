@@ -1,6 +1,10 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:buudeli/util/dialog.dart';
+import 'package:buudeli/util/my_constant.dart';
 import 'package:buudeli/util/style1.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,6 +19,7 @@ class _AddShopInfoState extends State<AddShopInfo> {
 //Field
   double lat, lng;
   File file;
+  String shopName, shopAdress, shopPhone , urlImage;
 
   @override
   void initState() {
@@ -67,11 +72,45 @@ class _AddShopInfoState extends State<AddShopInfo> {
       width: 300.0,
       child: RaisedButton.icon(
         color: Colors.amber,
-        onPressed: () {},
+        onPressed: () {
+          if (shopName == null ||
+              shopName.isEmpty ||
+              shopAdress == null ||
+              shopAdress.isEmpty ||
+              shopPhone == null ||
+              shopPhone.isEmpty) {
+            normaldialog(context, "กรุณากรอกข้อมูลให้ครบถ้วน");
+          } else if (file == null) {
+            normaldialog(context, "กรุณาเลือกรูปภาพ");
+          } else {
+            uploadPhoto();
+          }
+        },
         icon: Icon(Icons.save),
         label: Text('บันทึกข้อมูล'),
       ),
     );
+  }
+
+  Future<Null> uploadPhoto() async {
+    Random random = Random();
+    int x = random.nextInt(100000);
+    String photoName = 'shop$x.jpg';
+    String url = '${Myconstant().domain}/Buudeli/shopPhoto.php';
+
+    try {
+      Map<String, dynamic> map = Map();
+      map['file'] =
+          await MultipartFile.fromFile(file.path, filename: photoName);
+      FormData formData = FormData.fromMap(map);
+      await Dio().post('$url', data: formData).then((value) {
+        print('Res = $value');
+        urlImage = '${Myconstant().domain}/Buudeli/shop/$photoName';
+        print('ImageUrl = $urlImage');
+      });
+    } catch (e) {
+      print('Error\n $url \n $file');
+    }
   }
 
   Container showMap() {
@@ -156,6 +195,7 @@ class _AddShopInfoState extends State<AddShopInfo> {
             margin: EdgeInsets.only(top: 10.0),
             width: 250.0,
             child: TextField(
+              onChanged: (value) => shopName = value.trim(),
               decoration: InputDecoration(
                 labelText: 'ชื่อของร้านค้า',
                 prefixIcon: Icon(Icons.home),
@@ -173,6 +213,7 @@ class _AddShopInfoState extends State<AddShopInfo> {
             margin: EdgeInsets.only(top: 10.0),
             width: 250.0,
             child: TextField(
+              onChanged: (value) => shopAdress = value.trim(),
               decoration: InputDecoration(
                 labelText: 'ที่อยู่ของร้านค้า',
                 prefixIcon: Icon(Icons.account_box),
@@ -182,22 +223,23 @@ class _AddShopInfoState extends State<AddShopInfo> {
           ),
         ],
       );
-}
 
-Widget phoneForm() => Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-          width: 250.0,
-          child: TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: 'เบอร์โทรของร้านค้า',
-              prefixIcon: Icon(Icons.account_box),
-              border: OutlineInputBorder(),
+  Widget phoneForm() => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+            width: 250.0,
+            child: TextField(
+              onChanged: (value) => shopPhone = value.trim(),
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'เบอร์โทรของร้านค้า',
+                prefixIcon: Icon(Icons.account_box),
+                border: OutlineInputBorder(),
+              ),
             ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+}
