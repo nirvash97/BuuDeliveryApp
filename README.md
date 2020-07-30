@@ -3,6 +3,9 @@
  A new Delivery App Flutter project-.
  
 # Note Patch
+ # 27.7.20
+ - add Get Data from textfield 
+ - make image pre-upload to server
  # 26.7.20
  - add ImagePicker
  - edit add shop info pages
