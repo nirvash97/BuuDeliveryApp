@@ -3,6 +3,9 @@
  A new Delivery App Flutter project-.
  
 # Note Patch
+ # 30.7.20
+ - Add & Fix API
+ - Create thread for edit database
  # 27.7.20
  - add Get Data from textfield 
  - make image pre-upload to server
