@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddShopInfo extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _AddShopInfoState extends State<AddShopInfo> {
 //Field
   double lat, lng;
   File file;
-  String shopName, shopAdress, shopPhone , urlImage;
+  String shopName, shopAddress, shopPhone, urlImage;
 
   @override
   void initState() {
@@ -75,8 +76,8 @@ class _AddShopInfoState extends State<AddShopInfo> {
         onPressed: () {
           if (shopName == null ||
               shopName.isEmpty ||
-              shopAdress == null ||
-              shopAdress.isEmpty ||
+              shopAddress == null ||
+              shopAddress.isEmpty ||
               shopPhone == null ||
               shopPhone.isEmpty) {
             normaldialog(context, "กรุณากรอกข้อมูลให้ครบถ้วน");
@@ -96,7 +97,7 @@ class _AddShopInfoState extends State<AddShopInfo> {
     Random random = Random();
     int x = random.nextInt(100000);
     String photoName = 'shop$x.jpg';
-    String url = '${Myconstant().domain}/Buudeli/shopPhoto.php';
+    String url = '${Myconstant().domain}/Buudeli/addShopPhoto.php';
 
     try {
       Map<String, dynamic> map = Map();
@@ -105,12 +106,29 @@ class _AddShopInfoState extends State<AddShopInfo> {
       FormData formData = FormData.fromMap(map);
       await Dio().post('$url', data: formData).then((value) {
         print('Res = $value');
-        urlImage = '${Myconstant().domain}/Buudeli/shop/$photoName';
+        urlImage = '/Buudeli/shop/$photoName';
         print('ImageUrl = $urlImage');
+        editShopProcess();
       });
     } catch (e) {
       print('Error\n $url \n $file');
+      print(e);
     }
+  }
+
+  Future<Null> editShopProcess() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String id = preferences.getString('id');
+    String url =
+        'http://192.168.56.1/Buudeli/editDataId.php?isAdd=true&id=$id&NameShop=$shopName&Address=$shopAddress&Phone=$shopPhone&ImageUrl=$urlImage&Lat=$lat&Lng=$lng';
+    print('$id $shopName $shopAddress $urlImage $lat $lng');
+    await Dio().get(url).then((value) {
+      if (value.toString() == 'true') {
+        Navigator.pop(context);
+      } else {
+        normaldialog(context, "Upload Failed");
+      }
+    });
   }
 
   Container showMap() {
@@ -213,7 +231,7 @@ class _AddShopInfoState extends State<AddShopInfo> {
             margin: EdgeInsets.only(top: 10.0),
             width: 250.0,
             child: TextField(
-              onChanged: (value) => shopAdress = value.trim(),
+              onChanged: (value) => shopAddress = value.trim(),
               decoration: InputDecoration(
                 labelText: 'ที่อยู่ของร้านค้า',
                 prefixIcon: Icon(Icons.account_box),
