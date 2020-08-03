@@ -5,6 +5,7 @@ import 'package:buudeli/screens/main_rider.dart';
 import 'package:buudeli/screens/main_shop.dart';
 import 'package:buudeli/screens/main_user.dart';
 import 'package:buudeli/util/dialog.dart';
+import 'package:buudeli/util/my_constant.dart';
 import 'package:buudeli/util/style1.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _SignInState extends State<SignIn> {
   }
 
   Future<Null> authen() async {
-    String url= 'http://192.168.56.1/Buudeli/getUser.php?isAdd=true&User=$username';
+    String url= '${Myconstant().domain}/Buudeli/getUser.php?isAdd=true&User=$username';
     try {
       Response response = await Dio().get(url) ;
       print('Res = $response');

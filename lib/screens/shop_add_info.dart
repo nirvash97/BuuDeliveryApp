@@ -120,7 +120,7 @@ class _AddShopInfoState extends State<AddShopInfo> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String id = preferences.getString('id');
     String url =
-        'http://192.168.56.1/Buudeli/editDataId.php?isAdd=true&id=$id&NameShop=$shopName&Address=$shopAddress&Phone=$shopPhone&ImageUrl=$urlImage&Lat=$lat&Lng=$lng';
+        '${Myconstant().domain}/Buudeli/editDataId.php?isAdd=true&id=$id&NameShop=$shopName&Address=$shopAddress&Phone=$shopPhone&ImageUrl=$urlImage&Lat=$lat&Lng=$lng';
     print('$id $shopName $shopAddress $urlImage $lat $lng');
     await Dio().get(url).then((value) {
       if (value.toString() == 'true') {
