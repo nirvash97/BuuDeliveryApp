@@ -3,6 +3,9 @@
  A new Delivery App Flutter project-.
  
 # Note Patch
+ # 3.8.20
+  - repair userModel 
+  - Get Data Api
  # 30.7.20
  - Add & Fix API
  - Create thread for edit database
