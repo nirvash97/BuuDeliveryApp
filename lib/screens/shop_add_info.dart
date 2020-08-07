@@ -106,7 +106,7 @@ class _AddShopInfoState extends State<AddShopInfo> {
       FormData formData = FormData.fromMap(map);
       await Dio().post('$url', data: formData).then((value) {
         print('Res = $value');
-        urlImage = '/Buudeli/shop/$photoName';
+        urlImage = '/Buudeli/shopBanner/$photoName';
         print('ImageUrl = $urlImage');
         editShopProcess();
       });

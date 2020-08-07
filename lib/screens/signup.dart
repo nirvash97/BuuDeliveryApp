@@ -260,7 +260,7 @@ class _SignUpState extends State<SignUp> {
       );
 
       Future<Null> registerThread()async {
-        String url ='http://192.168.56.1/Buudeli/addData.php?isAdd=true&name=$name&username=$username&password=$password&usertype=$usertype';
+        String url ='${Myconstant().domain}/Buudeli/addData.php?isAdd=true&name=$name&username=$username&password=$password&usertype=$usertype';
         try{
           Response response = await Dio().get(url);
           print('res = $response');

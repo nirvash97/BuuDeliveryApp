@@ -4,12 +4,18 @@ class Style1 {
   Color goldAmber = Colors.amberAccent;
   Color littleGray = Colors.grey[400];
   Widget showProgress() {
-    return Center(child: CircularProgressIndicator(),);
+    return Center(
+      child: CircularProgressIndicator(),
+    );
   }
 
   SizedBox mysizebox() => SizedBox(
         width: 8.0,
         height: 10.0,
+      );
+  SizedBox adjustBox(double w, double h) => SizedBox(
+        width: w,
+        height: h,
       );
 
   Text showname(String title) => Text(title,
@@ -19,7 +25,19 @@ class Style1 {
         fontWeight: FontWeight.bold,
       ));
 
-  Widget titleCenter(String title) {
+  Text titleWidget(String title) => Text(title,
+      style: TextStyle(
+        fontSize: 20.0,
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+      ));
+  Text titleWidget2(String title) => Text(title,
+      style: TextStyle(
+        fontSize: 16.0,
+        color: Colors.black,
+      ));
+
+  Widget titleCenter(BuildContext context, String title) {
     return Center(
       child: Text(
         title,
