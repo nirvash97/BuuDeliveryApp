@@ -3,6 +3,16 @@
  A new Delivery App Flutter project-.
  
 # Note Patch
+
+# 7.8.20
+ - add new shop info
+ - add edit info page
+ - fix location_web not found
+ - fix some issue it's have chance to be problem in future
+ - apply with ngrok
+ - make new util
+ - note add note on code ( will add more soon)
+
  # 3.8.20
   - repair userModel 
   - Get Data Api
