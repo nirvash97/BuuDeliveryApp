@@ -1,11 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:buudeli/model/user_model.dart';
+import 'package:buudeli/util/dialog.dart';
 import 'package:buudeli/util/my_constant.dart';
 import 'package:buudeli/util/style1.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +23,7 @@ class _EditShopInfoState extends State<EditShopInfo> {
   String nameShop, address, phone, imageUrl;
   Location location = Location();
   double lat, lng;
+  File file;
   @override
   void initState() {
     // TODO: implement initState
@@ -73,7 +78,7 @@ class _EditShopInfoState extends State<EditShopInfo> {
             showPic(),
             addressform(),
             phoneform(),
-            lat==null ? Style1().showProgress() :showmap(),
+            lat == null ? Style1().showProgress() : showmap(),
             editbutton()
           ],
         ),
@@ -84,11 +89,62 @@ class _EditShopInfoState extends State<EditShopInfo> {
       width: MediaQuery.of(context).size.width,
       child: RaisedButton.icon(
         color: Style1().goldAmber,
-        onPressed: () {},
+        onPressed: () => confirmDialog(),
         icon: Icon(Icons.edit),
         label: Text('แก้ไขรายละเอียด'),
       ),
     );
+  }
+
+  Future<Null> confirmDialog() async {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text("Are you sure about that ?"),
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              OutlineButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  editThread();
+                },
+                child: Text("Sure"),
+              ),
+              OutlineButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("No!!"),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<Null> editThread() async {
+    Random random = Random();
+    int x = random.nextInt(10000000);
+    String namefile = 'FixShop$x.jpg';
+
+    Map<String, dynamic> map = Map();
+    map['file'] = await MultipartFile.fromFile(file.path, filename: namefile);
+    FormData formData = FormData.fromMap(map);
+    String imageupload = '${Myconstant().domain}/Buudeli/addShopPhoto.php';
+    await Dio().post(imageupload, data: formData).then((value) async {
+      imageUrl = '/Buudeli/shopBanner/$namefile';
+
+      String id = userModel.id;
+      String url =
+          '${Myconstant().domain}/Buudeli/editDataId.php?isAdd=true&id=$id&NameShop=$nameShop&Address=$address&Phone=$phone&ImageUrl=$imageUrl&Lat=$lat&Lng=$lng';
+      Response response = await Dio().get(url);
+      if (response.toString() == 'true') {
+        Navigator.pop(context);
+      } else {
+        normaldialog(context, 'Updating Failed');
+      }
+    });
   }
 
   Container showmap() {
@@ -127,19 +183,37 @@ class _EditShopInfoState extends State<EditShopInfo> {
             margin: EdgeInsets.only(top: 20.0),
             child: Row(
               children: <Widget>[
-                IconButton(icon: Icon(Icons.add_a_photo), onPressed: null),
+                IconButton(
+                    icon: Icon(Icons.add_a_photo),
+                    onPressed: () => chooseImage(ImageSource.camera)),
                 Container(
                   height: 250.0,
                   width: 250.0,
-                  child: Image.network('${Myconstant().domain}$imageUrl'),
+                  child: file == null
+                      ? Image.network('${Myconstant().domain}$imageUrl')
+                      : Image.file(file),
                 ),
                 IconButton(
-                    icon: Icon(Icons.add_photo_alternate), onPressed: null),
+                    icon: Icon(Icons.add_photo_alternate),
+                    onPressed: () => chooseImage(ImageSource.gallery)),
               ],
             ),
           ),
         ],
       );
+
+  Future<Null> chooseImage(ImageSource source) async {
+    try {
+      var object = await ImagePicker.pickImage(
+        source: source,
+        maxHeight: 800.0,
+        maxWidth: 800.0,
+      );
+      setState(() {
+        file = object;
+      });
+    } catch (e) {}
+  }
 
   Widget nameshopform() => Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -166,7 +240,7 @@ class _EditShopInfoState extends State<EditShopInfo> {
             margin: EdgeInsets.only(top: 15.0),
             width: 250.0,
             child: TextFormField(
-              onChanged: (value) => nameShop = value,
+              onChanged: (value) => address = value,
               initialValue: address,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -184,7 +258,7 @@ class _EditShopInfoState extends State<EditShopInfo> {
             margin: EdgeInsets.only(top: 15.0),
             width: 250.0,
             child: TextFormField(
-              onChanged: (value) => nameShop = value,
+              onChanged: (value) => phone = value,
               initialValue: phone,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),

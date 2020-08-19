@@ -50,7 +50,7 @@ class _ShopInfoState extends State<ShopInfo> {
     MaterialPageRoute route = MaterialPageRoute(
       builder: (context) => widget,
     );
-    Navigator.push(context, route);
+    Navigator.push(context, route).then((value) => readUserData());
   }
 
   @override
