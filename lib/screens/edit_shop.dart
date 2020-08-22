@@ -204,13 +204,13 @@ class _EditShopInfoState extends State<EditShopInfo> {
 
   Future<Null> chooseImage(ImageSource source) async {
     try {
-      var object = await ImagePicker.pickImage(
+      var object = await ImagePicker().getImage(
         source: source,
         maxHeight: 800.0,
         maxWidth: 800.0,
       );
       setState(() {
-        file = object;
+        file = File(object.path);
       });
     } catch (e) {}
   }

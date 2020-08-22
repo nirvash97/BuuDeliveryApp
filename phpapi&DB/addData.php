@@ -20,25 +20,23 @@ if (!$link->set_charset("utf8")) {
 if (isset($_GET)) {
 	if ($_GET['isAdd'] == 'true') {
 				
-		$User = $_GET['User'];
+		$Name = $_GET['name'];
+		$User = $_GET['username'];
+		$Password = $_GET['password'];
+		$Usertype = $_GET['usertype'];
+							
+		$sql = "INSERT INTO `usertable`(`id`, `usertype`, `name`, `username`, `password`, `NameShop`, `Address`, `Phone`, `ImageUrl`, `Lat`, `Lng`, `Token`) VALUES (Null,'$Usertype','$Name','$User','$Password', '', '', '', '', '', '', '')";
 
-		$result = mysqli_query($link, "SELECT * FROM usertable WHERE username = '$User'");
+		$result = mysqli_query($link, $sql);
 
 		if ($result) {
+			echo "true";
+		} else {
+			echo "false";
+		}
 
-			while($row=mysqli_fetch_assoc($result)){
-			$output[]=$row;
-
-			}	// while
-
-			echo json_encode($output);
-
-		} //if
-
-	} else echo "Welcome Master UNG";	// if2
+	} else echo "Everything is okay ready for waorking";
    
-}	// if1
-
-
+}
 	mysqli_close($link);
 ?>

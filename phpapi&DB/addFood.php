@@ -20,25 +20,25 @@ if (!$link->set_charset("utf8")) {
 if (isset($_GET)) {
 	if ($_GET['isAdd'] == 'true') {
 				
-		$id = $_GET['id'];
+		$idShop = $_GET['idShop'];
+		$foodName = $_GET['foodName'];
+		$imgPath = $_GET['imgPath'];
+		$price = $_GET['price'];
+		$info = $_GET['info'];
 
-		$result = mysqli_query($link, "SELECT * FROM usertable WHERE id = '$id'");
+							
+		$sql = "INSERT INTO `foodtable`(`id`, `idShop`, `foodName`, `imgPath`, `price`, `info`) VALUES (Null,'$idShop','$foodName','$imgPath','$price','$info')";
+
+		$result = mysqli_query($link, $sql);
 
 		if ($result) {
+			echo "true";
+		} else {
+			echo "false";
+		}
 
-			while($row=mysqli_fetch_assoc($result)){
-			$output[]=$row;
-
-			}	// while
-
-			echo json_encode($output);
-
-		} //if
-
-	} else echo "Welcome Master UNG";	// if2
+	} else echo "Everything is okay ready for waorking";
    
-}	// if1
-
-
+}
 	mysqli_close($link);
 ?>
