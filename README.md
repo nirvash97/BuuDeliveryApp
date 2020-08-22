@@ -3,6 +3,14 @@
  A new Delivery App Flutter project-.
  
 # Note Patch
+# 22.8.20
+- Can't text all what im do but i will try if i can remember
+- Fix Code for Update lib
+- Make new addfood screen 
+- add new API
+- Update DB
+- Make Everything Working ( except avialable on IOS ;-;)
+- a lot of thing left but forget to update on GITHUB
 
 # 7.8.20
  - add new shop info
