@@ -31,6 +31,20 @@ class Style1 {
         color: Colors.black,
         fontWeight: FontWeight.bold,
       ));
+
+  Text foodmaintitle1(String title) => Text(title,
+      style: TextStyle(
+        fontSize: 16.0,
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+      ));
+  Text foodtitle1(String title) => Text(title,
+      style: TextStyle(
+        fontSize: 16.0,
+        color: Colors.black,
+      ));
+
+
   Text titleWidget2(String title) => Text(title,
       style: TextStyle(
         fontSize: 16.0,
