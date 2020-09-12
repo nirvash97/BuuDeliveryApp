@@ -3,6 +3,12 @@
  A new Delivery App Flutter project-.
  
 # Note Patch
+# 27.08.20
+- Add new API
+- Make Edit Food Page 
+- Make foodModel
+- Add more util file
+- Prepare data to show on user role
 # 22.8.20
 - Can't text all what im do but i will try if i can remember
 - Fix Code for Update lib
