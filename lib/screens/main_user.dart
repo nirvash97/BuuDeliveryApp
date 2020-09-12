@@ -1,10 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:buudeli/model/user_model.dart';
 import 'package:buudeli/util/logout_process.dart';
-import 'package:buudeli/util/my_constant.dart';
+
 import 'package:buudeli/util/style1.dart';
-import 'package:dio/dio.dart';
+import 'package:buudeli/widget/show_listShop.dart';
+import 'package:buudeli/widget/show_statusOrder.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,14 +13,15 @@ class MainUser extends StatefulWidget {
 
 class _MainUserState extends State<MainUser> {
   String nameUser;
-  List<UserModel> userModels = List();
+
+  Widget currentWidget;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    currentWidget = ShowListAllShop();
     findUser();
-    readShopList();
   }
 
   Future<Null> findUser() async {
@@ -32,47 +31,83 @@ class _MainUserState extends State<MainUser> {
     });
   }
 
-  Future<Null> readShopList() async {
-    String url =
-        "${Myconstant().domain}/Buudeli/getDataUserWhereType.php?isAdd=true&usertype=Owner";
-    await Dio().get(url).then((value) {
-      var res = jsonDecode(value.data);
-      for (var map in res) {
-        UserModel model = UserModel.fromJson(map);
-        
-        String nameShop = model.nameShop;
-        if (nameShop.isNotEmpty) {
-          print('${model.nameShop}');
-          setState(() {
-          userModels.add(model);
-        });
-        } else {}
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(nameUser == null ? 'Main User' : '$nameUser login'),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.exit_to_app),
-              onPressed: () => logoutProcess(context))
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //       icon: Icon(Icons.exit_to_app),
+        //       onPressed: () => logoutProcess(context))
+        // ],
       ),
       drawer: showDrawer(),
+      body: currentWidget,
     );
   }
 
   Drawer showDrawer() => Drawer(
-        child: ListView(
+        child: Stack(
           children: <Widget>[
-            showHeader(),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                showHeader(),
+                findShopBar(),
+                showOrderBar(),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                signOutBar(),
+              ],
+            ),
           ],
         ),
       );
+
+  ListTile findShopBar() {
+    return ListTile(
+      onTap: () {
+        Navigator.pop(context);
+        setState(() {
+          currentWidget = ShowListAllShop();
+        });
+      },
+      leading: Icon(Icons.home),
+      title: Text('ค้นหาร้านค้า'),
+      subtitle: Text('แสดงร้านค้าใกล้ๆคุณ'),
+    );
+  }
+
+  ListTile showOrderBar() {
+    return ListTile(
+      onTap: () {
+        Navigator.pop(context);
+        setState(() {
+          currentWidget = ShowStatusOrder();
+        });
+        
+      },
+      leading: Icon(Icons.payment),
+      title: Text('แสดง Order ที่สั่ง'),
+      subtitle: Text('แสดงรายการอาหารที่สั่ง'),
+    );
+  }
+
+  Widget signOutBar() {
+    return Container(
+      decoration: BoxDecoration(color: Colors.red),
+      child: ListTile(
+        onTap: () => logoutProcess(context),
+        leading: Icon(Icons.exit_to_app),
+        title: Text('Sing out'),
+        subtitle: Text('ออกจากระบบ'),
+      ),
+    );
+  }
 
   UserAccountsDrawerHeader showHeader() {
     return UserAccountsDrawerHeader(

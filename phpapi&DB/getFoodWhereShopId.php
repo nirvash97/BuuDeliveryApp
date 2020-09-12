@@ -35,7 +35,7 @@ if (isset($_GET)) {
 
 		} //if
 
-	} else echo "Everything is okay ready for waorking";	// if2
+	} else echo "Everything is okay ready for working";	// if2
    
 }	// if1
 
