@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:buudeli/model/cart_model.dart';
 import 'package:buudeli/model/food_model.dart';
 import 'package:buudeli/model/user_model.dart';
+import 'package:buudeli/util/dialog.dart';
 import 'package:buudeli/util/my_api.dart';
 import 'package:buudeli/util/my_constant.dart';
+import 'package:buudeli/util/sqLite.dart';
 import 'package:buudeli/util/style1.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:toast/toast.dart';
 
 class ShowMenuFood extends StatefulWidget {
   final UserModel userModel;
@@ -52,7 +56,7 @@ class _ShowMenuFoodState extends State<ShowMenuFood> {
         '${Myconstant().domain}/Buudeli/getFoodWhereShopId.php?isAdd=true&idShop=$idShop';
     await Dio().get(url).then((value) {
       var res = json.decode(value.data);
-      print('Decoded ===> $res');
+      // print('Decoded ===> $res');
 
       for (var map in res) {
         FoodModel foodModel = FoodModel.fromJson(map);
@@ -227,7 +231,44 @@ class _ShowMenuFoodState extends State<ShowMenuFood> {
     var changeFormat = NumberFormat('#0.0#', 'en_US');
     String distanceString = changeFormat.format(distance);
     int transport = MyAPI().findDeliveryCost(distance);
-    print(
-        'idShop = $idShop , ShopName = $nameShop , idFood = $idFood , namefood = $foodName \n price = $price , amount= $amount , sum = $sumInt , distance =$distanceString , dec = $transport');
+    // print(
+    //     'idShop = $idShop , ShopName = $nameShop , idFood = $idFood , namefood = $foodName \n price = $price , amount= $amount , sum = $sumInt , distance =$distanceString , dec = $transport');
+    Map<String, dynamic> map = Map();
+    map['idShop'] = idShop;
+    map['nameShop'] = nameShop;
+    map['idFood'] = idFood;
+    map['nameFood'] = foodName;
+    map['price'] = price;
+    map['amount'] = amount.toString();
+    map['sum'] = sumInt.toString();
+    map['distance'] = distanceString;
+    map['dec'] = transport.toString();
+    print('Map = ${map.toString()}');
+    CartModel cartModel = CartModel.fromJson(map);
+    var obj = await SQLite().readSQLiteData();
+    print('obj length = ${obj.length}');
+
+    if (obj.length == 0) {
+      await SQLite().insertDatabase(cartModel).then((value) {
+        print('Insert Success');
+        showToast('Item Add Tp Cart');
+      });
+    } else {
+      String idShopLite = obj[0].idShop;
+      print("idShop = $idShopLite");
+      if (idShop == idShopLite) {
+        await SQLite().insertDatabase(cartModel).then((value) {
+          print('Insert Check Success');
+          showToast('Item Add Tp Cart');
+        });
+      } else {
+        normaldialog(context,
+            "กรุณาชำระรายการอาหารของร้าน${obj[0].nameShop}ก่อนใช้บริการร้านถัดไป");
+      }
+    }
+  }
+
+  void showToast(String msg) {
+    Toast.show('Cart has been added',context, duration: Toast.LENGTH_LONG, gravity:  Toast.CENTER );
   }
 }

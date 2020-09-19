@@ -1,3 +1,4 @@
+import 'package:buudeli/screens/show_cart.dart';
 import 'package:flutter/material.dart';
 
 class Style1 {
@@ -27,9 +28,16 @@ class Style1 {
 
   Text titleWidget(String title) => Text(title,
       style: TextStyle(
-        fontSize: 20.0,
+        fontSize: 14.0,
         color: Colors.black,
         fontWeight: FontWeight.bold,
+      ));
+
+  Text titleCustom(String title , double fontsize , var c , var fw) => Text(title,
+      style: TextStyle(
+        fontSize: fontsize,
+        color: c,
+        fontWeight: fw,
       ));
 
   Text foodmaintitle1(String title) => Text(title,
@@ -39,19 +47,18 @@ class Style1 {
         fontWeight: FontWeight.bold,
       ));
 
-    Text foodmaintitle2(String title) => Text(title,
+  Text foodmaintitle2(String title) => Text(title,
       style: TextStyle(
         fontSize: 16.0,
         color: Colors.amberAccent,
         fontWeight: FontWeight.bold,
       ));
-  
+
   Text foodtitle1(String title) => Text(title,
       style: TextStyle(
         fontSize: 16.0,
         color: Colors.black,
       ));
-
 
   Text titleWidget2(String title) => Text(title,
       style: TextStyle(
@@ -59,13 +66,12 @@ class Style1 {
         color: Colors.black,
       ));
 
- Text titleBoldWidget1(String title) => Text(title,
+  Text titleBoldWidget1(String title) => Text(title,
       style: TextStyle(
         fontSize: 14.0,
         color: Colors.black,
         fontWeight: FontWeight.bold,
       ));
-
 
   Widget titleCenter(BuildContext context, String title) {
     return Center(
@@ -91,6 +97,17 @@ class Style1 {
       width: 120.0,
       child: Image.asset('images/mainicons.png'),
     );
+  }
+
+  Widget iconShowShop(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.add_shopping_cart),
+        onPressed: () {
+          MaterialPageRoute route = MaterialPageRoute(
+            builder: (context) => ShowCart(),
+          );
+          Navigator.push(context, route);
+        });
   }
 
   Style1();

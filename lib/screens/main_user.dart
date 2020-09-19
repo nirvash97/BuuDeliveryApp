@@ -1,3 +1,4 @@
+import 'package:buudeli/screens/show_cart.dart';
 import 'package:buudeli/util/logout_process.dart';
 
 import 'package:buudeli/util/style1.dart';
@@ -41,6 +42,9 @@ class _MainUserState extends State<MainUser> {
         //       icon: Icon(Icons.exit_to_app),
         //       onPressed: () => logoutProcess(context))
         // ],
+        actions: <Widget>[
+          Style1().iconShowShop(context),
+        ],
       ),
       drawer: showDrawer(),
       body: currentWidget,
@@ -56,6 +60,7 @@ class _MainUserState extends State<MainUser> {
                 showHeader(),
                 findShopBar(),
                 showOrderBar(),
+                showCart(),
               ],
             ),
             Column(
@@ -89,7 +94,6 @@ class _MainUserState extends State<MainUser> {
         setState(() {
           currentWidget = ShowStatusOrder();
         });
-        
       },
       leading: Icon(Icons.payment),
       title: Text('แสดง Order ที่สั่ง'),
@@ -116,6 +120,20 @@ class _MainUserState extends State<MainUser> {
       accountName: Text('$nameUser', style: TextStyle(color: Colors.amber)),
       accountEmail:
           Text('Welcome to our service', style: TextStyle(color: Colors.amber)),
+    );
+  }
+
+  Widget showCart() {
+    return ListTile(
+      leading: Icon(Icons.add_shopping_cart),
+      title: Text('ตะกร้าสินค้า'),
+      subtitle: Text('รายการในตระกร้าสินค้าของฉัน'),
+      onTap: () {
+        Navigator.pop(context);
+        MaterialPageRoute route =
+            MaterialPageRoute(builder: (context) => ShowCart());
+        Navigator.push(context, route);
+      },
     );
   }
 }
