@@ -1,5 +1,6 @@
 import 'package:buudeli/screens/show_cart.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 class Style1 {
   Color goldAmber = Colors.amberAccent;
@@ -33,7 +34,7 @@ class Style1 {
         fontWeight: FontWeight.bold,
       ));
 
-  Text titleCustom(String title , double fontsize , var c , var fw) => Text(title,
+  Text titleCustom(String title, double fontsize, var c, var fw) => Text(title,
       style: TextStyle(
         fontSize: fontsize,
         color: c,
@@ -108,6 +109,11 @@ class Style1 {
           );
           Navigator.push(context, route);
         });
+  }
+
+  void showToast(BuildContext context, String msg) {
+    Toast.show(msg, context,
+        duration: Toast.LENGTH_LONG, gravity: Toast.CENTER);
   }
 
   Style1();

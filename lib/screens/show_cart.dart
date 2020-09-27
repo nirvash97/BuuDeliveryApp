@@ -1,7 +1,12 @@
 import 'package:buudeli/model/cart_model.dart';
+import 'package:buudeli/util/dialog.dart';
+import 'package:buudeli/util/my_constant.dart';
 import 'package:buudeli/util/sqLite.dart';
 import 'package:buudeli/util/style1.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ShowCart extends StatefulWidget {
   @override
@@ -77,6 +82,7 @@ class _ShowCartState extends State<ShowCart> {
             Divider(),
             buildTotal(),
             clearOrderButtom(),
+            buildOrderButtom(),
           ],
         ),
       ),
@@ -96,6 +102,23 @@ class _ShowCartState extends State<ShowCart> {
             },
             icon: Icon(Icons.delete_forever),
             label: Text('ลบรายการอาหารทั้งหมด')),
+      ],
+    );
+  }
+
+  Widget buildOrderButtom() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        RaisedButton.icon(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            color: Colors.amber,
+            onPressed: () {
+              orderThread();
+            },
+            icon: Icon(Icons.shopping_basket),
+            label: Text('Confirm Order')),
       ],
     );
   }
@@ -177,7 +200,7 @@ class _ShowCartState extends State<ShowCart> {
                   });
                 },
               ),
-            )
+            ),
           ],
         ),
       );
@@ -224,5 +247,55 @@ class _ShowCartState extends State<ShowCart> {
         ],
       ),
     );
+  }
+
+  Future<Null> orderThread() async {
+    DateTime dateTime = DateTime.now();
+    // print('dateTime = ${dateTime.toString()}');
+    String orderDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String idUser = preferences.getString('id');
+    String nameUser = preferences.getString('name');
+    String idShop = cartModels[0].idShop;
+    String nameShop = cartModels[0].nameShop;
+    String distance = cartModels[0].distance;
+    String transport = cartModels[0].dec;
+    List<String> idFoods = List();
+    List<String> nameFoods = List();
+    List<String> prices = List();
+    List<String> amounts = List();
+    List<String> sums = List();
+    for (var model in cartModels) {
+      idFoods.add(model.idFood);
+      nameFoods.add(model.nameFood);
+      prices.add(model.price);
+      amounts.add(model.amount);
+      sums.add(model.sum);
+    }
+    String idFood = idFoods.toString();
+    String nameFood = nameFoods.toString();
+    String price = prices.toString();
+    String amount = amounts.toString();
+    String sum = sums.toString();
+    print('User detail : $idUser , $nameUser');
+    print(
+        'object= $orderDate \n shop = $idShop nShop = $nameShop distance = $distance dec = $transport');
+    print('idFood = $idFood namefood = $nameFood');
+    print('price = $price amount= $amount sum=$sum');
+    String url =
+        '${Myconstant().domain}/Buudeli/addOrder.php?isAdd=true&orderDate=$orderDate&idUser=$idUser&nameUser=$nameUser&idShop=$idShop&nameShop=$nameShop&distance=$distance&transport=$transport&idFood=$idFood&nameFood=$nameFood&price=$price&amount=$amount&sum=$sum&rider=NONE&process=UserOrder';
+
+    await Dio().get(url).then((value) async {
+      if (value.toString() == 'true') {
+        print('Insert Order to Database Success');
+        Style1().showToast(context, 'Order Has Been Sended');
+        await SQLite().clearSQLite().then((value) {
+          readSQLite();
+        });
+      } else {
+        print('failed');
+        normaldialog(context, 'Plz Try again');
+      }
+    });
   }
 }

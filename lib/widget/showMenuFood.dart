@@ -269,6 +269,6 @@ class _ShowMenuFoodState extends State<ShowMenuFood> {
   }
 
   void showToast(String msg) {
-    Toast.show('Cart has been added',context, duration: Toast.LENGTH_LONG, gravity:  Toast.CENTER );
+    Toast.show('Cart has been added',context, duration: Toast.LENGTH_SHORT, gravity:  Toast.CENTER );
   }
 }
