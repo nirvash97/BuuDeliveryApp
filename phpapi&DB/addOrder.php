@@ -21,6 +21,8 @@ if (isset($_GET)) {
 	if ($_GET['isAdd'] == 'true') {
 				
 		$orderDate = $_GET['orderDate'];
+		$idUser = $_GET['idUser'];
+		$nameUser = $_GET['nameUser'];
 		$idShop = $_GET['idShop'];
 		$nameShop = $_GET['nameShop'];
 		$distance = $_GET['distance'];
@@ -32,7 +34,7 @@ if (isset($_GET)) {
 		$sum = $_GET['sum'];
 		$rider = $_GET['rider'];
 		$process = $_GET['process'];		
-		$sql = "INSERT INTO `ordertable`(`id`, `orderDate`, `idShop`, `nameShop`, `distance`, `transport`, `idFood`, `nameFood`, `price`, `amount`, `sum`, `rider`, `process`) VALUES (Null,'$orderDate','$idShop','$nameShop','$distance','$transport','$idFood','$nameFood','$price','$amount','$sum','$rider','$process')";
+		$sql = "INSERT INTO `ordertable`(`id`, `orderDate`, `idUser`, `nameUser`, `idShop`, `nameShop`, `distance`, `transport`, `idFood`, `nameFood`, `price`, `amount`, `sum`, `rider`, `process`) VALUES (Null,'$orderDate','$idUser','$nameUser','$idShop','$nameShop','$distance','$transport','$idFood','$nameFood','$price','$amount','$sum','$rider','$process')";
 
 		$result = mysqli_query($link, $sql);
 
