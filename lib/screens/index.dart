@@ -5,7 +5,9 @@ import 'package:buudeli/screens/signIn.dart';
 import 'package:buudeli/screens/signup.dart';
 import 'package:buudeli/util/dialog.dart';
 import 'package:buudeli/util/style1.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Index extends StatefulWidget {
@@ -14,11 +16,87 @@ class Index extends StatefulWidget {
 }
 
 class _IndexState extends State<Index> {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  String message;
+  String channelId = "1000";
+  String channelName = "FLUTTER_NOTIFICATION_CHANNEL";
+  String channelDescription = "FLUTTER_NOTIFICATION_CHANNEL_DETAIL";
+
   @override
   void initState() {
+    message = "No message.";
+
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('ic_launcher');
+
+    var initializationSettingsIOS = IOSInitializationSettings(
+        onDidReceiveLocalNotification: (id, title, body, payload) {
+      print("onDidReceiveLocalNotification called.");
+    });
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (payload) {
+      // when user tap on notification.
+      print("onSelectNotification called.");
+      setState(() {
+        message = payload;
+      });
+    });
     // TODO: implement initState
     super.initState();
+    initFirebaseMessaging();
     checkPreferences();
+  }
+
+  sendNotification(String title, String body) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails('10000',
+        'FLUTTER_NOTIFICATION_CHANNEL', 'FLUTTER_NOTIFICATION_CHANNEL_DETAIL',
+        importance: Importance.max, priority: Priority.high);
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+
+    var platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      111,
+      '$title',
+      '$body',
+      platformChannelSpecifics,
+    );
+  }
+
+  void initFirebaseMessaging() {
+    firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        Map mapNotification = message["notification"];
+        String title = mapNotification["title"];
+        String body = mapNotification["body"];
+        sendNotification(title,body);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+
+    firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+
+    firebaseMessaging.getToken().then((String token) {
+      assert(token != null);
+      print("Token : $token");
+    });
   }
 
   Future<Null> checkPreferences() async {
@@ -93,10 +171,11 @@ class _IndexState extends State<Index> {
 
   UserAccountsDrawerHeader showHeader() {
     return UserAccountsDrawerHeader(
-      decoration: Style1().myBoxDeco('guest.jpg') ,
+      decoration: Style1().myBoxDeco('guest.jpg'),
       currentAccountPicture: Style1().showlogo(),
       accountName: Text('Guest', style: TextStyle(color: Colors.amber)),
-      accountEmail: Text('Please Sign-In', style: TextStyle(color: Colors.amber)),
+      accountEmail:
+          Text('Please Sign-In', style: TextStyle(color: Colors.amber)),
     );
   }
 }

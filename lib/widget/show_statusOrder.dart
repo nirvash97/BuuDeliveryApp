@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:buudeli/model/order_model.dart';
-import 'package:buudeli/screens/index.dart';
 import 'package:buudeli/util/my_constant.dart';
 import 'package:buudeli/util/style1.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:steps_indicator/steps_indicator.dart';
 
 class ShowStatusOrder extends StatefulWidget {
   @override
@@ -21,6 +21,8 @@ class _ShowStatusOrderState extends State<ShowStatusOrder> {
   List<List<String>> listPriceFoods = List();
   List<List<String>> listAmountFoods = List();
   List<List<String>> listSumFoods = List();
+  List<int> totalInt = List();
+  List<int> statusCode = List();
 
   @override
   void initState() {
@@ -66,11 +68,53 @@ class _ShowStatusOrderState extends State<ShowStatusOrder> {
             ),
             buildHead(),
             listViewFood(index),
+            buildTotal(index),
+            Style1().mysizebox(),
+            buildStepIndicator(statusCode[index]),
           ],
         ),
       );
 
-  ListView listViewFood(int index) => ListView.builder(padding: EdgeInsets.only(bottom: 15),
+  Widget buildStepIndicator(int code) => Column(
+        children: [
+          StepsIndicator(
+            lineLength: 80,
+            nbSteps: 4,
+            selectedStep: code,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text('Order'),
+              Text('Cooking'),
+              Text('Delivery'),
+              Text('Complete'),
+            ],
+          ),
+        ],
+      );
+
+  Widget buildTotal(int index) => Row(
+        children: [
+          Expanded(
+            flex: 5,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Style1().titleWidget('ราคาสุทธิ : '),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Style1().titleCustom('${totalInt[index].toString()}', 20,
+                Colors.amber, FontWeight.bold),
+          ),
+        ],
+      );
+
+  ListView listViewFood(int index) => ListView.builder(
+        padding: EdgeInsets.only(bottom: 15),
         shrinkWrap: true,
         physics: ScrollPhysics(),
         itemCount: listMenuFoods[index].length,
@@ -82,7 +126,8 @@ class _ShowStatusOrderState extends State<ShowStatusOrder> {
             ),
             Expanded(
               flex: 1,
-              child: Row(mainAxisAlignment: MainAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(listPriceFoods[index][index2]),
                 ],
@@ -90,7 +135,8 @@ class _ShowStatusOrderState extends State<ShowStatusOrder> {
             ),
             Expanded(
               flex: 1,
-              child: Row(mainAxisAlignment: MainAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(listAmountFoods[index][index2]),
                 ],
@@ -98,7 +144,8 @@ class _ShowStatusOrderState extends State<ShowStatusOrder> {
             ),
             Expanded(
               flex: 1,
-              child: Row(mainAxisAlignment: MainAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(listSumFoods[index][index2]),
                 ],
@@ -159,7 +206,7 @@ class _ShowStatusOrderState extends State<ShowStatusOrder> {
   List<String> arrayConvert(String arrayData) {
     List<String> list = List();
     String tmp = arrayData.substring(1, arrayData.length - 1);
-    print('convert = $tmp');
+    // print('convert = $tmp');
     list = tmp.split(',');
     int index = 0;
     for (var string in list) {
@@ -184,7 +231,28 @@ class _ShowStatusOrderState extends State<ShowStatusOrder> {
           List<String> price = arrayConvert(model.price);
           List<String> amount = arrayConvert(model.amount);
           List<String> sum = arrayConvert(model.sum);
-          print('sum = ${model.sum}');
+          int total = 0;
+          int status = 0;
+          switch (model.process) {
+            case 'UserOrder':
+              status = 0;
+              break;
+            case 'Cooking':
+              status = 1;
+              break;
+            case 'Delivery':
+              status = 2;
+              break;
+            case 'Finish':
+              status = 3;
+              break;
+            default:
+          }
+          for (var item in sum) {
+            total = total + int.parse(item);
+          }
+          print(total);
+          // print('sum = ${model.sum}');
           print(menuFoods);
           setState(() {
             orderStatus = false;
@@ -193,6 +261,8 @@ class _ShowStatusOrderState extends State<ShowStatusOrder> {
             listPriceFoods.add(price);
             listAmountFoods.add(amount);
             listSumFoods.add(sum);
+            totalInt.add(total);
+            statusCode.add(status);
           });
         }
       }

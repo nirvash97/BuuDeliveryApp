@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "252732376851",
+    "firebase_url": "https://buudeli-61cb6.firebaseio.com",
+    "project_id": "buudeli-61cb6",
+    "storage_bucket": "buudeli-61cb6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252732376851:android:afdb22cf70ea368db77ce6",
+        "android_client_info": {
+          "package_name": "com.flutterthailand.buudeli"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252732376851-rghaqa00krp7l28qks146su7q3b5sfv5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCy0up2Q_TJ6gumt9Qn2D47F3gA9tQVe_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252732376851-rghaqa00krp7l28qks146su7q3b5sfv5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
