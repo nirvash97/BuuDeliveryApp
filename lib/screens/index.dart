@@ -4,7 +4,9 @@ import 'package:buudeli/screens/main_user.dart';
 import 'package:buudeli/screens/signIn.dart';
 import 'package:buudeli/screens/signup.dart';
 import 'package:buudeli/util/dialog.dart';
+import 'package:buudeli/util/my_constant.dart';
 import 'package:buudeli/util/style1.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -20,6 +22,7 @@ class _IndexState extends State<Index> {
       FlutterLocalNotificationsPlugin();
   FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   String message;
+  String finalToken;
   String channelId = "1000";
   String channelName = "FLUTTER_NOTIFICATION_CHANNEL";
   String channelDescription = "FLUTTER_NOTIFICATION_CHANNEL_DETAIL";
@@ -59,7 +62,8 @@ class _IndexState extends State<Index> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
 
     var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
       111,
@@ -76,7 +80,7 @@ class _IndexState extends State<Index> {
         Map mapNotification = message["notification"];
         String title = mapNotification["title"];
         String body = mapNotification["body"];
-        sendNotification(title,body);
+        sendNotification(title, body);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
@@ -95,7 +99,11 @@ class _IndexState extends State<Index> {
 
     firebaseMessaging.getToken().then((String token) {
       assert(token != null);
-      print("Token : $token");
+      
+      setState(() {
+        finalToken = token;
+      });
+      print("Final Token : $finalToken");
     });
   }
 
@@ -103,6 +111,15 @@ class _IndexState extends State<Index> {
     try {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String checkType = preferences.getString('usertype');
+      String idLogin = preferences.getString('id');
+      print('ID =====> $idLogin');
+      if (idLogin != null || idLogin.isNotEmpty) {
+        String url =
+            "${Myconstant().domain}/Buudeli/editTokenWhereID.php?isAdd=true&id=$idLogin&Token=$finalToken";
+        await Dio().get(url).then(
+            (value) => print("===========Token Has been updated============"));
+      }
+
       if (checkType != null && checkType.isNotEmpty) {
         if (checkType == 'User') {
           print('$checkType Role Access');

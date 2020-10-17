@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:buudeli/model/cart_model.dart';
+import 'package:buudeli/model/user_model.dart';
 import 'package:buudeli/util/dialog.dart';
 import 'package:buudeli/util/my_constant.dart';
 import 'package:buudeli/util/sqLite.dart';
@@ -292,9 +295,33 @@ class _ShowCartState extends State<ShowCart> {
         await SQLite().clearSQLite().then((value) {
           readSQLite();
         });
+        notificationToShop(idShop);
       } else {
         print('failed');
         normaldialog(context, 'Plz Try again');
+      }
+    });
+  }
+
+  Future<Null> notificationToShop(String idShop) async {
+    String url =
+        '${Myconstant().domain}/buudeli/getDataUserWhereId.php?isAdd=true&id=$idShop';
+    await Dio().get(url).then((value) async {
+      var result = json.decode(value.data);
+      print("result =======> $result");
+      for (var item in result) {
+        UserModel model = UserModel.fromJson(item);
+        String tokenShop = model.token;
+        print("token Shop = $tokenShop");
+        String title = "Order to your shop";
+        String body = "มีคนส่งอาหารที่ร้านของคุณลองเข้าไปดูสิ";
+        String notiUrl =
+            "${Myconstant().domain}/Buudeli/apiNotification.php?isAdd=true&token=$tokenShop&title=$title&body=$body";
+        await Dio().get(notiUrl).then((value) {
+          normaldialog(
+              context, "ออเดอร์ของคณได้แจ้งไปยังร้านค้าแล้ว กรุณารอสักครู่");
+
+        });
       }
     });
   }
