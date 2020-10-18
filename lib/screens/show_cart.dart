@@ -286,7 +286,7 @@ class _ShowCartState extends State<ShowCart> {
     print('idFood = $idFood namefood = $nameFood');
     print('price = $price amount= $amount sum=$sum');
     String url =
-        '${Myconstant().domain}/Buudeli/addOrder.php?isAdd=true&orderDate=$orderDate&idUser=$idUser&nameUser=$nameUser&idShop=$idShop&nameShop=$nameShop&distance=$distance&transport=$transport&idFood=$idFood&nameFood=$nameFood&price=$price&amount=$amount&sum=$sum&rider=NONE&process=UserOrder';
+        '${Myconstant().domain}/Buudeli/addOrder.php?isAdd=true&orderDate=$orderDate&idUser=$idUser&nameUser=$nameUser&idShop=$idShop&nameShop=$nameShop&distance=$distance&transport=$transport&idFood=$idFood&nameFood=$nameFood&price=$price&amount=$amount&sum=$sum&rider=NONE&process=Cooking';
 
     await Dio().get(url).then((value) async {
       if (value.toString() == 'true') {

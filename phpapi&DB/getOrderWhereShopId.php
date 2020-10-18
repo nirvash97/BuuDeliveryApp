@@ -17,31 +17,28 @@ if (!$link->set_charset("utf8")) {
     exit();
 	}
 
-
 if (isset($_GET)) {
 	if ($_GET['isAdd'] == 'true') {
-			
-		$id = $_GET['id'];
-		$foodName = $_GET['foodName'];
-		$imgPath = $_GET['imgPath'];
-		$price = $_GET['price'];
-		$info = $_GET['info'];
-		
-							
-		$sql = "UPDATE `foodtable` SET `foodName`='$foodName',`imgPath`='$imgPath',`price`='$price',`info`='$info' WHERE id = '$id' ";
+				
+		$idShop = $_GET['idShop'];
 
-		$result = mysqli_query($link, $sql);
+		$result = mysqli_query($link, "SELECT * FROM ordertable WHERE idShop = '$idShop'");
 
 		if ($result) {
-			echo "true";
-		} else {
-			echo "false";
-			echo `$result`;
-		}
 
-	} else echo "Everything is okay ready for working";
+			while($row=mysqli_fetch_assoc($result)){
+			$output[]=$row;
+
+			}	// while
+
+			echo json_encode($output);
+
+		} //if
+
+	} else echo "Everything is okay ready for working";	// if2
    
-}
+}	// if1
+
 
 	mysqli_close($link);
 ?>

@@ -35,7 +35,8 @@ class _OrderListShopState extends State<OrderListShop> {
   Widget build(BuildContext context) {
     return buildContent();
   }
-    Row callOrderID(int index) {
+
+  Row callOrderID(int index) {
     return Row(
       children: [
         Style1().titleCustom('Order หมายเลข : ${orderModels[index].id}', 20,
@@ -43,7 +44,8 @@ class _OrderListShopState extends State<OrderListShop> {
       ],
     );
   }
-    Container buildHead() {
+
+  Container buildHead() {
     return Container(
       padding: EdgeInsets.only(left: 5),
       decoration: BoxDecoration(color: Colors.grey[300]),
@@ -72,25 +74,42 @@ class _OrderListShopState extends State<OrderListShop> {
   }
 
   Widget buildContent() => ListView.builder(
-    padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(10.0),
         itemCount: orderModels.length,
         itemBuilder: (context, index) => Column(
           children: [
             callOrderID(index),
             Row(
               children: [
-                Style1()
-                    .titleWidget('Order Time : ${orderModels[index].orderDate}'),
+                Style1().titleWidget(
+                    'Order Time : ${orderModels[index].orderDate}'),
               ],
             ),
-buildHead(),
-listViewFood(index),
+            buildHead(),
+            listViewFood(index),
+            Row(
+              children: [
+                RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    color: Colors.amber,
+                    onPressed: () {},
+                    icon: Icon(Icons.check_box),
+                    label: Text('ยืนยันการส่ง Order')),
+                RaisedButton.icon(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    color: Colors.amber,
+                    onPressed: () {},
+                    icon: Icon(Icons.check_box),
+                    label: Text('ยกเลิก Order Order')),
+              ],
+            ),
           ],
         ),
       );
 
-
-        ListView listViewFood(int index) => ListView.builder(
+  ListView listViewFood(int index) => ListView.builder(
         padding: EdgeInsets.only(bottom: 15),
         shrinkWrap: true,
         physics: ScrollPhysics(),
@@ -132,7 +151,6 @@ listViewFood(index),
         ),
       );
 
-
   List<String> arrayConvert(String arrayData) {
     List<String> list = List();
     String tmp = arrayData.substring(1, arrayData.length - 1);
@@ -150,11 +168,11 @@ listViewFood(index),
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String idShop = preferences.getString('id');
     String url =
-        "${Myconstant().domain}/buudeli/getOrderWhereShopId.php?isAdd=true&idShop=$idShop";
+        "${Myconstant().domain}/Buudeli/getOrderWhereShopId.php?isAdd=true&idShop=$idShop";
     Response response = await Dio().get(url);
     if (response.toString() != 'null') {
       var result = json.decode(response.data);
-      print("response = $result");
+
       for (var map in result) {
         OrderModel model = OrderModel.fromJson(map);
         List<String> menuFoods = arrayConvert(model.nameFood);

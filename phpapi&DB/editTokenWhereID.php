@@ -21,14 +21,12 @@ if (!$link->set_charset("utf8")) {
 if (isset($_GET)) {
 	if ($_GET['isAdd'] == 'true') {
 			
-		$id = $_GET['id'];
-		$foodName = $_GET['foodName'];
-		$imgPath = $_GET['imgPath'];
-		$price = $_GET['price'];
-		$info = $_GET['info'];
+		$id = $_GET['id'];		
+		$Token = $_GET['Token'];
+
 		
 							
-		$sql = "UPDATE `foodtable` SET `foodName`='$foodName',`imgPath`='$imgPath',`price`='$price',`info`='$info' WHERE id = '$id' ";
+		$sql = "UPDATE `usertable` SET `Token` = '$Token' WHERE id = '$id'";
 
 		$result = mysqli_query($link, $sql);
 
@@ -39,7 +37,7 @@ if (isset($_GET)) {
 			echo `$result`;
 		}
 
-	} else echo "Everything is okay ready for working";
+	} else echo "Everything is okay ready for waorking";
    
 }
 

@@ -68,7 +68,7 @@ class _AddFoodMenuState extends State<AddFoodMenu> {
   }
 
   Future<Null> uploadFoodPhoto() async {
-    String url = '${Myconstant().domain}/Buudeli/foodImg.php';
+    String url = 'https://cgm.informatics.buu.ac.th/~buuzap/Buudeli/foodImg.php';
     Random x = Random();
     int i = x.nextInt(999999999);
     String lmgName = 'Food$i.jpg';
@@ -79,7 +79,7 @@ class _AddFoodMenuState extends State<AddFoodMenu> {
       await Dio().post('$url', data: formData).then((value) {
         print('Res = $value');
         urlImage = '/Buudeli/Foodpic/$lmgName';
-        print('ImageUrl = ${Myconstant().domain}$urlImage');
+        print('ImageUrl = https://cgm.informatics.buu.ac.th/~buuzap$urlImage');
         insertToDB();
       });
     } catch (e) {}

@@ -133,7 +133,7 @@ class _EditShopInfoState extends State<EditShopInfo> {
     FormData formData = FormData.fromMap(map);
     String imageupload = '${Myconstant().domain}/Buudeli/addShopPhoto.php';
     await Dio().post(imageupload, data: formData).then((value) async {
-      imageUrl = '/Buudeli/shopBanner/$namefile';
+      imageUrl = '/Buudeli/ShopBanner/$namefile';
 
       String id = userModel.id;
       String url =
