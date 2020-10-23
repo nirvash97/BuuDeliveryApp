@@ -10,7 +10,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  String usertype, name, username, password;
+  String usertype, name, username, password, phone;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +28,8 @@ class _SignUpState extends State<SignUp> {
           reguserform(),
           Style1().mysizebox(),
           regnameform(),
+          Style1().mysizebox(),
+          phoneform(),
           Style1().mysizebox(),
           regpasswordform(),
           Style1().mysizebox(),
@@ -57,7 +59,9 @@ class _SignUpState extends State<SignUp> {
               username == null ||
               username.isEmpty ||
               password == null ||
-              password.isEmpty) {
+              password.isEmpty ||
+              phone == null ||
+              phone.isEmpty) {
             print('Please Input All Data');
             normaldialog(context, 'ข้อมูลไม่ครบถ้วน');
           } else if (usertype == null || usertype.isEmpty) {
@@ -73,24 +77,20 @@ class _SignUpState extends State<SignUp> {
         ),
       ));
 
-    Future<Null> checkUser() async {
-      String url = '${Myconstant().domain}/Buudeli/getUser.php?isAdd=true&User=$username';
-      
-      try{
-        Response response = await Dio().get(url);
-        if( response.toString() == 'null') {
+  Future<Null> checkUser() async {
+    String url =
+        '${Myconstant().domain}/Buudeli/getUser.php?isAdd=true&User=$username';
+
+    try {
+      Response response = await Dio().get(url);
+      if (response.toString() == 'null') {
         registerThread();
-        }
-        else
-        {
-          normaldialog(context, 'This username $username is not avialable Please Change !');
-        }
-      }catch(e)
-      {
-
+      } else {
+        normaldialog(context,
+            'This username $username is not avialable Please Change !');
       }
-
-    }
+    } catch (e) {}
+  }
 
   Widget userrole1() => Row(
         //Customer Selection
@@ -235,6 +235,31 @@ class _SignUpState extends State<SignUp> {
         ],
       );
 
+  Widget phoneform() => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 250.0,
+            height: 50.0,
+            child: TextField(
+              onChanged: (value) => phone = value.trim(),
+              obscureText: true,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.phone, color: Style1().littleGray),
+                labelStyle: TextStyle(color: Style1().littleGray),
+                labelText: 'เบอร์โทรศัพท์ :',
+                enabledBorder: OutlineInputBorder(
+                    borderSide: (BorderSide(color: Style1().goldAmber))),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: (BorderSide(color: Style1().goldAmber)),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+
   Widget regpasswordform() => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -259,18 +284,19 @@ class _SignUpState extends State<SignUp> {
         ],
       );
 
-      Future<Null> registerThread()async {
-        String url ='${Myconstant().domain}/Buudeli/addData.php?isAdd=true&name=$name&username=$username&password=$password&usertype=$usertype';
-        try{
-          Response response = await Dio().get(url);
-          print('res = $response');
-          if(response.toString() =='true'){
-            Navigator.pop(context);
-          }
-        } catch(e){
-          print(e);
-          print('not clear');
-          normaldialog(context, 'Register Fail. Please try again.');
-        }
+  Future<Null> registerThread() async {
+    String url =
+        '${Myconstant().domain}/Buudeli/addData.php?isAdd=true&username=$username&password=$password&usertype=$usertype&phone=$phone&name=$name';
+    try {
+      Response response = await Dio().get(url);
+      print('res = $response');
+      if (response.toString() == 'true') {
+        Navigator.pop(context);
       }
+    } catch (e) {
+      print(e);
+      print('not clear');
+      normaldialog(context, 'Register Fail. Please try again.');
+    }
+  }
 }

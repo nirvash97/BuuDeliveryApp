@@ -21,7 +21,7 @@ class _FoodListShopState extends State<FoodListShop> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     readFoodList();
   }
@@ -95,6 +95,7 @@ class _FoodListShopState extends State<FoodListShop> {
               height: MediaQuery.of(context).size.width * 0.4,
               child: SingleChildScrollView(
                 child: Column(
+          
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Style1().foodmaintitle1(foodModels[index].foodName),

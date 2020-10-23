@@ -1,10 +1,10 @@
-import 'dart:math';
+
 
 import 'package:buudeli/model/user_model.dart';
 import 'package:buudeli/util/my_api.dart';
 import 'package:buudeli/util/my_constant.dart';
 import 'package:buudeli/util/style1.dart';
-import 'package:buudeli/widget/showMenuFood.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -26,7 +26,6 @@ class _AboutShopState extends State<AboutShop> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     userModel = widget.userModel;
     findUlatlng();

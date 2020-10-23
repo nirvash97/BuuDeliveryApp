@@ -23,7 +23,7 @@ class _AddShopInfoState extends State<AddShopInfo> {
 
   @override
   void initState() {
-    // TODO: implement initState
+  
     super.initState();
     findLatLng();
   }

@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:buudeli/util/logout_process.dart';
 import 'package:buudeli/util/style1.dart';
@@ -19,7 +19,7 @@ class _MainShopState extends State<MainShop> {
   String nameUser;
   @override
   void initState() {
-    // TODO: implement initState
+ 
     super.initState();
     findUser();
   }

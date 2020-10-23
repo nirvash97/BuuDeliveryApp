@@ -23,7 +23,6 @@ class _EditFoodState extends State<EditFood> {
   String foodName, price, info, imgPath;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     foodModel = widget.foodModel;
     foodName = foodModel.foodName;
@@ -198,6 +197,7 @@ class _EditFoodState extends State<EditFood> {
             width: 250.0,
             child: TextFormField(
               onChanged: (value) => price = value.trim(),
+              keyboardType: TextInputType.number,
               initialValue: foodModel.price,
               decoration: InputDecoration(
                 labelText: 'ราคาอาหาร',

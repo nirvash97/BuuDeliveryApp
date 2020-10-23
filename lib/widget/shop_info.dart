@@ -20,7 +20,7 @@ class _ShopInfoState extends State<ShopInfo> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
 
     super.initState();
     readUserData();

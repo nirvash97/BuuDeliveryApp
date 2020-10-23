@@ -9,6 +9,7 @@ import 'package:buudeli/util/style1.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ShowCart extends StatefulWidget {
@@ -20,6 +21,7 @@ class _ShowCartState extends State<ShowCart> {
   List<CartModel> cartModels = List();
   int cartSum = 0;
   bool stat = true;
+  double currentLat, currentLng;
 
   @override
   void initState() {
@@ -286,7 +288,7 @@ class _ShowCartState extends State<ShowCart> {
     print('idFood = $idFood namefood = $nameFood');
     print('price = $price amount= $amount sum=$sum');
     String url =
-        '${Myconstant().domain}/Buudeli/addOrder.php?isAdd=true&orderDate=$orderDate&idUser=$idUser&nameUser=$nameUser&idShop=$idShop&nameShop=$nameShop&distance=$distance&transport=$transport&idFood=$idFood&nameFood=$nameFood&price=$price&amount=$amount&sum=$sum&rider=NONE&process=Cooking';
+        '${Myconstant().domain}/Buudeli/addOrder.php?isAdd=true&orderDate=$orderDate&idUser=$idUser&nameUser=$nameUser&idShop=$idShop&nameShop=$nameShop&distance=$distance&transport=$transport&idFood=$idFood&nameFood=$nameFood&price=$price&amount=$amount&sum=$sum&rider=NONE&process=UserOrder';
 
     await Dio().get(url).then((value) async {
       if (value.toString() == 'true') {
@@ -301,11 +303,34 @@ class _ShowCartState extends State<ShowCart> {
         normaldialog(context, 'Plz Try again');
       }
     });
+    await findUlatlng();
+    String editLatUrl =
+        "${Myconstant().domain}/Buudeli/editUserLatLngWhereId.php?isAdd=true&Lat=$currentLat&Lng=$currentLng&id=$idUser";
+    await Dio().get(editLatUrl).then((value) {
+      print("Update User LatLng ====== > $value");
+    });
+  }
+
+  Future<Null> findUlatlng() async {
+    LocationData locationData = await findLocationData();
+    setState(() {
+      currentLat = locationData.latitude;
+      currentLng = locationData.longitude;
+    });
+  }
+
+  Future<LocationData> findLocationData() async {
+    Location location = Location();
+    try {
+      return await location.getLocation();
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<Null> notificationToShop(String idShop) async {
     String url =
-        '${Myconstant().domain}/buudeli/getDataUserWhereId.php?isAdd=true&id=$idShop';
+        '${Myconstant().domain}/Buudeli/getDataUserWhereId.php?isAdd=true&id=$idShop';
     await Dio().get(url).then((value) async {
       var result = json.decode(value.data);
       print("result =======> $result");
@@ -320,7 +345,6 @@ class _ShowCartState extends State<ShowCart> {
         await Dio().get(notiUrl).then((value) {
           normaldialog(
               context, "ออเดอร์ของคณได้แจ้งไปยังร้านค้าแล้ว กรุณารอสักครู่");
-
         });
       }
     });

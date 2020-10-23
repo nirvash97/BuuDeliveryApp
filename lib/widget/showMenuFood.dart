@@ -31,7 +31,7 @@ class _ShowMenuFoodState extends State<ShowMenuFood> {
   Location location = Location();
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     userModel = widget.userModel;
     readFoodMenu();

@@ -35,6 +35,7 @@ class _IndexState extends State<Index> {
         AndroidInitializationSettings('ic_launcher');
 
     var initializationSettingsIOS = IOSInitializationSettings(
+        // ignore: missing_return
         onDidReceiveLocalNotification: (id, title, body, payload) {
       print("onDidReceiveLocalNotification called.");
     });
