@@ -4,6 +4,7 @@ import 'package:buudeli/util/logout_process.dart';
 import 'package:buudeli/util/style1.dart';
 import 'package:buudeli/widget/food_list_shop.dart';
 import 'package:buudeli/widget/order_list_shop.dart';
+import 'package:buudeli/widget/shop_history.dart';
 import 'package:buudeli/widget/shop_info.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,7 +50,9 @@ class _MainShopState extends State<MainShop> {
             homeMenu(),
             menu_Manage(),
             informationMenu(),
+            historyPage(),
             logout1(),
+            
           ],
         ),
       );
@@ -61,6 +64,18 @@ class _MainShopState extends State<MainShop> {
         onTap: () {
           setState(() {
             currentWidget = OrderListShop();
+          });
+          Navigator.pop(context);
+        },
+      );
+
+    ListTile historyPage() => ListTile(
+        leading: Icon(Icons.account_balance),
+        title: Text('Salary'),
+        subtitle: Text('รายได้ของคุณ'),
+        onTap: () {
+          setState(() {
+            currentWidget = ShopHistory();
           });
           Navigator.pop(context);
         },

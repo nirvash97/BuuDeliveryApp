@@ -31,25 +31,44 @@ class _MainRiderState extends State<MainRider> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Main Rider'), actions: <Widget>[
-        IconButton(
-            icon: Icon(Icons.exit_to_app),
-            onPressed: () => logoutProcess(context))
-      ]),
+      appBar: AppBar(title: Text('Rider $nameRider')),
       drawer: showDrawer(),
       body: currentWidget,
     );
   }
 
   Drawer showDrawer() => Drawer(
-        child: ListView(
+        child: Stack(
           children: <Widget>[
-            showHeader(),
-            jobsMenu(),
-            jobsDone(),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                showHeader(),
+                jobsMenu(),
+                jobsDone(),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                signOutBar(),
+              ],
+            ),
           ],
         ),
       );
+
+  Widget signOutBar() {
+    return Container(
+      decoration: BoxDecoration(color: Colors.red),
+      child: ListTile(
+        onTap: () => logoutProcess(context),
+        leading: Icon(Icons.exit_to_app),
+        title: Text('Sing out'),
+        subtitle: Text('ออกจากระบบ'),
+      ),
+    );
+  }
 
   ListTile jobsMenu() => ListTile(
         leading: Icon(Icons.directions_bike),
@@ -74,7 +93,6 @@ class _MainRiderState extends State<MainRider> {
           Navigator.pop(context);
         },
       );
-
 
   UserAccountsDrawerHeader showHeader() {
     return UserAccountsDrawerHeader(
