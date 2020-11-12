@@ -30,7 +30,6 @@ class _FoodListShopState extends State<FoodListShop> {
     if (foodModels.length != 0) {
       foodModels.clear();
     }
-
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String idShop = preferences.getString('id');
     String url =
@@ -136,7 +135,7 @@ class _FoodListShopState extends State<FoodListShop> {
                 Row(
                   children: <Widget>[
                     FlatButton(
-                      onPressed: () => delThread(foodID),
+                      onPressed: () => delThread(foodID).then((value) => readFoodList()),
                       child: Text('Confirm'),
                     ),
                     FlatButton(

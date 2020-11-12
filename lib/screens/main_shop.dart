@@ -81,6 +81,7 @@ class _MainShopState extends State<MainShop> {
         },
       );
 
+  // ignore: non_constant_identifier_names
   ListTile menu_Manage() => ListTile(
         leading: Icon(Icons.edit),
         title: Text('จัดการอาหารของฉัน'),

@@ -1,3 +1,4 @@
+
 import 'package:buudeli/screens/main_rider.dart';
 import 'package:buudeli/screens/main_shop.dart';
 import 'package:buudeli/screens/main_user.dart';
@@ -43,6 +44,7 @@ class _IndexState extends State<Index> {
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        // ignore: missing_return
         onSelectNotification: (payload) {
       // when user tap on notification.
       print("onSelectNotification called.");
@@ -100,7 +102,7 @@ class _IndexState extends State<Index> {
 
     firebaseMessaging.getToken().then((String token) {
       assert(token != null);
-      
+
       setState(() {
         finalToken = token;
       });
@@ -150,8 +152,16 @@ class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: Text("Buu Delivery Service"),),
       drawer: showDrawer(),
+      body: Center(
+        child: Column(
+        children: [
+          Style1().adjustBox(10, 220),
+          Style1().showlogo(),
+          Text("Please Sign-in or Sign-up to use this app"),
+        ],
+      )),
     );
   }
 

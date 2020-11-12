@@ -68,7 +68,6 @@ class _SignUpState extends State<SignUp> {
             normaldialog(context, 'กรุณาเลือกชนิดผู้ใช้');
           } else {
             checkUser();
-            
           }
         },
         child: Text(
@@ -163,7 +162,7 @@ class _SignUpState extends State<SignUp> {
                     });
                   },
                 ),
-                Text('ตีนผีท้านรก',
+                Text('ผู้ส่ง',
                     style: TextStyle(
                       color: Colors.black,
                     ))
@@ -243,7 +242,6 @@ class _SignUpState extends State<SignUp> {
             height: 50.0,
             child: TextField(
               onChanged: (value) => phone = value.trim(),
-              obscureText: true,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.phone, color: Style1().littleGray),

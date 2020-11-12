@@ -30,14 +30,15 @@ class _OrderListShopState extends State<OrderListShop> {
 
   @override
   void initState() {
-
     findShopOrder();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return orderStatus ? Style1().showProgress() : buildContent();
+    return orderStatus
+        ? Style1().titleCenter(context, "ยังไม่มี Order ครับ")
+        : buildContent();
   }
 
   Row callOrderID(int index) {
@@ -166,7 +167,9 @@ class _OrderListShopState extends State<OrderListShop> {
         // ignore: unrelated_type_equality_checks
         itemBuilder: (context, index) => processFoods[index] == 'Cooking'
             // ignore: unrelated_type_equality_checks
-            ? riders[index] != "NONE" ? checkProcess(index) : Container()
+            ? riders[index] != "NONE"
+                ? checkProcess(index)
+                : Container()
             : Container(),
       );
 

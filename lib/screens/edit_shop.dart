@@ -19,6 +19,7 @@ class EditShopInfo extends StatefulWidget {
 }
 
 class _EditShopInfoState extends State<EditShopInfo> {
+  bool photoStatus = true;
   UserModel userModel;
   String nameShop, address, phone, imageUrl;
   Location location = Location();
@@ -26,7 +27,6 @@ class _EditShopInfoState extends State<EditShopInfo> {
   File file;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     readCurrentInfo();
     location.onLocationChanged.listen((event) {
@@ -124,17 +124,8 @@ class _EditShopInfoState extends State<EditShopInfo> {
   }
 
   Future<Null> editThread() async {
-    Random random = Random();
-    int x = random.nextInt(10000000);
-    String namefile = 'FixShop$x.jpg';
-
-    Map<String, dynamic> map = Map();
-    map['file'] = await MultipartFile.fromFile(file.path, filename: namefile);
-    FormData formData = FormData.fromMap(map);
-    String imageupload = '${Myconstant().domain}/Buudeli/addShopPhoto.php';
-    await Dio().post(imageupload, data: formData).then((value) async {
-      imageUrl = '/Buudeli/ShopBanner/$namefile';
-
+    if (photoStatus) {
+      String imageUrl = userModel.imageUrl;
       String id = userModel.id;
       String url =
           '${Myconstant().domain}/Buudeli/editDataId.php?isAdd=true&id=$id&NameShop=$nameShop&Address=$address&Phone=$phone&ImageUrl=$imageUrl&Lat=$lat&Lng=$lng';
@@ -144,7 +135,29 @@ class _EditShopInfoState extends State<EditShopInfo> {
       } else {
         normaldialog(context, 'Updating Failed');
       }
-    });
+    } else {
+      Random random = Random();
+      int x = random.nextInt(10000000);
+      String namefile = 'FixShop$x.jpg';
+
+      Map<String, dynamic> map = Map();
+      map['file'] = await MultipartFile.fromFile(file.path, filename: namefile);
+      FormData formData = FormData.fromMap(map);
+      String imageupload = '${Myconstant().domain}/Buudeli/addShopPhoto.php';
+      await Dio().post(imageupload, data: formData).then((value) async {
+        imageUrl = '/Buudeli/ShopBanner/$namefile';
+
+        String id = userModel.id;
+        String url =
+            '${Myconstant().domain}/Buudeli/editDataId.php?isAdd=true&id=$id&NameShop=$nameShop&Address=$address&Phone=$phone&ImageUrl=$imageUrl&Lat=$lat&Lng=$lng';
+        Response response = await Dio().get(url);
+        if (response.toString() == 'true') {
+          Navigator.pop(context);
+        } else {
+          normaldialog(context, 'Updating Failed');
+        }
+      });
+    }
   }
 
   Container showmap() {
@@ -213,6 +226,9 @@ class _EditShopInfoState extends State<EditShopInfo> {
         file = File(object.path);
       });
     } catch (e) {}
+    setState(() {
+      photoStatus = true;
+    });
   }
 
   Widget nameshopform() => Row(

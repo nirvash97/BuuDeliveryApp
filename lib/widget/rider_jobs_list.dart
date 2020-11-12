@@ -46,6 +46,7 @@ class _RiderJobsListState extends State<RiderJobsList> {
       if (orderModels[i].rider == nameRider &&
           orderModels[i].process == "Cooking") {
         routeToGPS(i);
+        break;
       }
     }
   }
@@ -270,7 +271,6 @@ class _RiderJobsListState extends State<RiderJobsList> {
     } else {
       orderStatus = true;
     }
-    await Future.delayed(Duration(seconds: 1));
     checkJobs();
   }
 
